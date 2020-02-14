@@ -22,7 +22,9 @@ public class JsonImport
 {
     public static void main(String[] args) throws Exception
     {
-        importCorpus("resources/split/gab-splitaa");
+        System.out.println(args[0]);
+
+        importCorpus(args[0]);
     }
 
     // Methode zum Importieren des gab Corpus in die Datenbank "posts"
@@ -49,39 +51,4 @@ public class JsonImport
         con.close();
     }
 
-    //Methode, die den Text von Posts an Watson weiterleitet, die Watson-Daten aufbereitet und mithilfe von updateData aus MySQLconnect in die Datenbank speichert
-    public static void importWatson(){
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new FileReader(
-                    "resources/text_id.txt"));
-            String line = reader.readLine();
-            while (line != null) {
-                String text = line;
-                int id = Integer.parseInt(reader.readLine());
-                AnalysisResults results = Watson.klassifizierer(text);
-
-                        MySQLconnect con = new MySQLconnect();
-                // parsing file "JSONExample.json"
-                Object obj = null;
-                try {
-                    obj = new JSONParser().parse(new FileReader("watson.json"));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                // typecasting obj to JSONObject
-                JSONObject jo = (JSONObject) obj;
-
-                line = reader.readLine();
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
-
-/**
- con.updateData(id, jtest.getString("sentiment"), jtest.getDouble("sentiment"), jtest.getDouble("sadness"), jtest.getDouble("joy"), jtest.getDouble("fear"), jtest.getDouble("disgust"), jtest.getDouble("anger"));
- **/

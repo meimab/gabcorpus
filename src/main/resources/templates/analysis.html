@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <title>W3.CSS Template</title>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -70,10 +70,12 @@ document.myform.mytextfield3.value = "Test";
     </div>
 </form>
 
+<h1 th:text="${sentimentscore}"></h1>
+
 <div class="w3-center">
-    <form action="http://localhost:8080/result" method="get">
+    <form action="classify?date=DATE" method="get">
         <div class="w3-center">
-            <button type="submit" class="w3-button w3-theme" onclick="myFunction()">Absenden</button></div>
+            <button type="submit" class="w3-button w3-theme">Absenden</button></div>
     </form>
 </div>
 
