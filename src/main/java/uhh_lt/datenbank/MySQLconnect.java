@@ -1,8 +1,7 @@
 package uhh_lt.datenbank;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -23,10 +22,11 @@ public class MySQLconnect{
 
     public MySQLconnect() {
         // get credentials
-        BufferedReader reader;
+        InputStream is = MySQLconnect.class.getResourceAsStream("/credentials.txt");
+        InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
+        BufferedReader reader = new BufferedReader(streamReader);
         try {
-            reader = new BufferedReader(new FileReader(
-                    "resources/credentials.txt"));
+
             String line = reader.readLine();
             while (line != null) {
                 String[] fields = line.split("=");
