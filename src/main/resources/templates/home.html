@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS Template</title>
+<title>gab.ai Sentiment-Analyse</title>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
@@ -35,16 +35,15 @@ function w3_close() {
 
 </script>
 <nav class="w3-sidebar w3-bar-block w3-card w3-animate-left w3-center" style="display:none" id="mySidebar">
-    <h1 class="w3-xxxMedium w3-text-theme">Side Navigation</h1>
-    <button class="w3-bar-item w3-button" onclick="w3_close()">Close <i class="fa fa-remove"></i></button>
-    <a href="#" class="w3-bar-item w3-button" onclick="location.href='http://localhost:8080/result';">Textanalyse</a>
-    <a href="#" class="w3-bar-item w3-button" method="get" onclick="location.href='http://localhost:8080/stats';" >Resultat</a>
+    <h1 class="w3-xxxMedium w3-text-theme">Navigation</h1>
+    <button class="w3-bar-item w3-button" onclick="w3_close()"> <i class="fa fa-remove"></i></button>
+    <a href="#" class="w3-bar-item w3-button" onclick="location.href='/';">Home</a>
+    <a href="#" class="w3-bar-item w3-button" method="get" onclick="location.href='/info';" >Info</a>
 </nav>
 
 <head>
     <div class="w3-container w3-theme w3-padding">
         <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i>
-        <h2 class="w3-center">Grp1: Mandatensicht </h2>
     </div>
 </head>
 
@@ -65,16 +64,43 @@ document.getElementById("mybutton").onclick = function() {
 document.myform.mytextfield3.value = "Test";
 }
 </script>
-<form action="http://localhost:8080/result" method="get">
-    <div class="container w3-center">
-    </div>
-</form>
 
 <div class="w3-center">
-    <form action="http://localhost:8080/result" method="get">
+    <br>
+    <p><font size="+2"><b>Willkommen bei der gab.ai Sentiment-Analyse!</b></font></p>
+</div>
+
+<div class="w3-center">
+    <br><br><br>
+    <p><font size="+1">Benutzen Sie "Analyse", um Informationen bezüglich Sentiment und Emotionen der gab Posts für das gewählten Datum zu erhalten.</font></p>
+    <br>
+    <form action="analysis" method="get">
+        <label for="date">Datum (Format: YYYY-MM-DD):
+            <input type="text" id="date" name="date"></label>
         <div class="w3-center">
-            <button type="submit" class="w3-button w3-theme" onclick="myFunction()">Absenden</button></div>
+            <br>
+            <button type="submit" class="w3-button w3-theme" onclick="myFunction()">Analyse</button>
+        </div>
     </form>
+</div>
+
+<div class="w3-center">
+    <br><br><br><br>
+    <p><font size="+1">Wollen Sie Daten klassifizieren? Benutzen Sie dazu einfach "Classify" für ein bestimmtes Datum oder "RandomClassfiy" ohne Datum.</font></p>
+</div>
+
+<div class="w3-center">
+    <br>
+    <form action="classify" method="get">
+        <label for="date">Datum (Format: YYYY-MM-DD):
+            <input type="text" id="date2" name="date"></label>
+        <div class="w3-center">
+            <br>
+            <button type="submit" class="w3-button w3-theme" onclick="myFunction()">Classify</button>
+        </div>
+    </form>
+    <br>
+    <a href="/randomClassify"><button class="w3-button w3-theme">RandomClassify</button></a>
 </div>
 
 </body>

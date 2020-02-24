@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
-<title>W3.CSS Template</title>
+<title>gab.ai Sentiment-Analyse</title>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
@@ -34,17 +34,38 @@ function w3_close() {
 }
 
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script th:utext="${data}"></script>
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable(datain);
+        var options = {
+          title: 'Grafische Darstellung der Emotionen'
+        }
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+</head>
+
+
+
 <nav class="w3-sidebar w3-bar-block w3-card w3-animate-left w3-center" style="display:none" id="mySidebar">
-    <h1 class="w3-xxxMedium w3-text-theme">Side Navigation</h1>
-    <button class="w3-bar-item w3-button" onclick="w3_close()">Close <i class="fa fa-remove"></i></button>
-    <a href="#" class="w3-bar-item w3-button" onclick="location.href='http://localhost:8080/result';">Textanalyse</a>
-    <a href="#" class="w3-bar-item w3-button" method="get" onclick="location.href='http://localhost:8080/stats';" >Resultat</a>
+    <h1 class="w3-xxxMedium w3-text-theme">Navigation</h1>
+    <button class="w3-bar-item w3-button" onclick="w3_close()"> <i class="fa fa-remove"></i></button>
+    <a href="#" class="w3-bar-item w3-button" onclick="location.href='/';">Home</a>
+    <a href="#" class="w3-bar-item w3-button" method="get" onclick="location.href='/info';" >Info</a>
 </nav>
 
 <head>
     <div class="w3-container w3-theme w3-padding">
         <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i>
-        <h2 class="w3-center">Grp1: Mandatensicht </h2>
+
     </div>
 </head>
 
@@ -65,18 +86,103 @@ document.getElementById("mybutton").onclick = function() {
 document.myform.mytextfield3.value = "Test";
 }
 </script>
-<form action="http://localhost:8080/result" method="get">
-    <div class="container w3-center">
-    </div>
-</form>
-
-<h1 th:text="${sentimentscore}"></h1>
 
 <div class="w3-center">
-    <form action="classify?date=DATE" method="get">
+<br>
+<p><b>Die durchschnittlichen Watson-Werte für das angegebene Datum:</b></p>
+    <p>Sentiment: <span th:text="${sentiment}"></span></p>
+    <p>Sadness: <span th:text="${sadness}"></span></p>
+    <p>Anger: <span th:text="${anger}"></span></p>
+    <p>Disgust: <span th:text="${disgust}"></span></p>
+    <p>Joy: <span th:text="${joy}"></span></p>
+    <p>Fear: <span th:text="${fear}"></span></p>
+<br>
+<p><b>Was bedeutet das?</b></p>
+<p>Der Wert für "Sentiment" ist zwischen -1 und 1, wobei positive und negative Werte jeweils für positive und negative Sentiments stehen. Die 0 steht für neutrales Sentiment. <br> Die Emotionen werden als Anteil angegeben, wobei die Summe von ihnen 1 ergibt.</p>
+</div>
+
+<div class="w3-center">
+    <div id="piechart" style="width: 3590px; height: 550px;"></div>
+</div>
+
+<div class="w3-center">
+    <br>
+    <p><b>Beispielposts vom angegebenen Datum:</b></p>
+    <br>
+</div>
+
+    <table style="width:100%">
+        <tr>
+            <th>Post</th>
+            <th>Sentiment</th>
+            <th>Sadness</th>
+            <th>Anger</th>
+            <th>Disgust</th>
+            <th>Joy</th>
+            <th>Fear</th>
+        </tr>
+        <tr>
+            <td align="center"><span th:text="${text1}"></span></td>
+            <td align="center"><span th:text="${sentiment1}"></span></td>
+            <td align="center"><span th:text="${sadness1}"></span></td>
+            <td align="center"><span th:text="${anger1}"></span></td>
+            <td align="center"><span th:text="${disgust2}"></span></td>
+            <td align="center"><span th:text="${joy1}"></span></td>
+            <td align="center"><span th:text="${fear2}"></span></td>
+        </tr>
+        <tr>
+            <td align="center"><span th:text="${text2}"></span></td>
+            <td align="center"><span th:text="${sentiment2}"></span></td>
+            <td align="center"><span th:text="${sadness2}"></span></td>
+            <td align="center"><span th:text="${anger2}"></span></td>
+            <td align="center"><span th:text="${disgust2}"></span></td>
+            <td align="center"><span th:text="${joy2}"></span></td>
+            <td align="center"><span th:text="${fear2}"></span></td>
+        </tr>
+        <tr>
+            <td align="center"><span th:text="${text3}"></span></td>
+            <td align="center"><span th:text="${sentiment3}"></span></td>
+            <td align="center"><span th:text="${sadness3}"></span></td>
+            <td align="center"><span th:text="${anger3}"></span></td>
+            <td align="center"><span th:text="${disgust3}"></span></td>
+            <td align="center"><span th:text="${joy3}"></span></td>
+            <td align="center"><span th:text="${fear3}"></span></td>
+        </tr>
+    </table>
+    <br>
+
+<div class="w3-center">
+    <br><br><br>
+    <p><font size="+1">Benutzen Sie "Analyse", um weitere Informationen bezüglich Sentiment und Emotionen der gab Posts für das gewählten Datum zu erhalten.</font></p>
+    <br>
+    <form action="analysis" method="get">
+        <label for="date">Datum (Format: YYYY-MM-DD):
+            <input type="text" id="date" name="date"></label>
         <div class="w3-center">
-            <button type="submit" class="w3-button w3-theme">Absenden</button></div>
+            <br>
+            <button type="submit" class="w3-button w3-theme" onclick="myFunction()">Analyse</button>
+        </div>
     </form>
+</div>
+
+<div class="w3-center">
+    <br><br><br><br>
+    <p><font size="+1">Wollen Sie Daten klassifizieren? Benutzen Sie dazu einfach "Classify" für ein bestimmtes Datum oder "RandomClassfiy" ohne Datum.</font></p>
+</div>
+
+<div class="w3-center">
+    <br>
+    <form action="classify" method="get">
+        <label for="date">Datum (Format: YYYY-MM-DD):
+            <input type="text" id="date2" name="date"></label>
+        <div class="w3-center">
+            <br>
+            <button type="submit" class="w3-button w3-theme" onclick="myFunction()">Classify</button>
+        </div>
+    </form>
+    <br>
+    <a href="/randomClassify"><button class="w3-button w3-theme">RandomClassify</button></a>
+    <br><br><br><br><br><br><br><br>
 </div>
 
 </body>
