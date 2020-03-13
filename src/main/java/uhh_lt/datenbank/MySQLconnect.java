@@ -1,32 +1,38 @@
 package uhh_lt.datenbank;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-
+/**
+ * Diese Klasse stellt eine Verbindung zu MySQL her und kann Daten in die Datenbank speichern, bestehende Zeilen aktualisieren und Daten auslesen.
+ */
 public class MySQLconnect{
     private static Connection con = null;
-    private static String dbHost = "basecamp-bigdata";	// Hostname
+    private static String dbHost;	// Hostname
     private static String dbPort = "3306";		// Port -- Standard: 3306
-    private static String dbName = "gabcorpus";	// Datenbankname
+    private static String dbName;	// Datenbankname
     private static String dbUser;;		// Datenbankuser
     private static String dbPass;		// Datenbankpasswort
     private static String dbTable = "posts";		// Posts Tabelle
 
+    /**
+     * Stellt eine Verbindung zur Datenbank her.
+     */
     public MySQLconnect() {
         // get credentials
         InputStream is = MySQLconnect.class.getResourceAsStream("/credentials.txt");
         InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
         BufferedReader reader = new BufferedReader(streamReader);
         try {
-
             String line = reader.readLine();
             while (line != null) {
                 String[] fields = line.split("=");
@@ -36,11 +42,17 @@ public class MySQLconnect{
                 if (fields[0].compareTo("mysql.password") == 0) {
                     dbPass = fields[1];
                 }
+                if (fields[0].compareTo("mysql.host") == 0) {
+                    dbHost = fields[1];
+                }
+                if (fields[0].compareTo("mysql.database") == 0) {
+                    dbName = fields[1];
+                }
                 line = reader.readLine();
             }
             reader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Abfrage hat nicht funktioniert");
         }
 
         try {
@@ -58,27 +70,35 @@ public class MySQLconnect{
         }
     }
 
-        private static Connection getInstance(){
-        if(con == null)
-            new MySQLconnect();
-        return con;
+    /**
+     * Schließt die Verbindung zur Datenbank
+     */
+    public void close() {
+        try {
+            con.close();
+        } catch (SQLException e) {
+            System.out.println("Verbindung konnte nicht geschlossen werden");
+        }
     }
 
-    // Methode zum Auslesen von Text aus der Datenbank, der zusammen mit der post_id verwendet wird, um Watson-Daten zu speichern
+    /**
+     * Methode, die den Text von 10 noch nicht von Watson klassifizierten Posts eines gewählten Datums aus der Datenbank liest und zusammen mit der zugehörigen ID in eine Hashmap speichert. Wird von classify und classifyNoDate in Verarbeitung benutzt, um Watson-Daten in die Datenbank zu speichern.
+     * @param datum String: Datum im Format YYYY-MM-DD
+     * @return results HashMap: Kombination von ids und Text aus Posts
+     */
     public static HashMap<Integer, String> getText(String datum)  {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date myDate = null;
         try {
             myDate = formatter.parse(datum);
         } catch (ParseException e) {
-            e.printStackTrace();
+            System.out.println("Datum konnte nicht geparst werden");
         }
         Statement st = null;
-        StringBuilder sb = new StringBuilder();
         try {
             st = con.createStatement();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Statement konnte nicht erstellt werden");
         }
         java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
         String sql = ("SELECT text, post_id FROM "+dbTable+" WHERE date(date) between '" +sqlDate+ "' and date_add('"+sqlDate+" 00:00:00',interval 12 hour) AND watson_sentiment IS NULL ORDER BY RAND() LIMIT 10;");
@@ -87,28 +107,61 @@ public class MySQLconnect{
         try {
             rs = st.executeQuery(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Anfrage konnte nicht ausgeführt werden");;
         }
         try {
             while(rs.next()) {
                 int id = rs.getInt("post_id");
                 String post_text = rs.getString("text");
-                System.out.println(id);
                 results.put(id, post_text);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Auf ResultSet konnte nicht zugegriffen werden");
         }
         return results;
     }
 
-    // Methode zum Auslesen von Text aus der Datenbank, der zusammen mit der post_id verwendet wird, um Watson-Daten zu speichern
+    /**
+     * Gibt die id, den Text und die Watson-Werte von 3 Posts aus
+     * @param datum String: Datum im Format YYYY-MM-DD
+     * @return
+     */
+    public static ResultSet getExamplePosts(String datum)  {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date myDate = null;
+        try {
+            myDate = formatter.parse(datum);
+        } catch (ParseException e) {
+            System.out.println("Datum konnte nicht geparst werden");
+        }
+        Statement st = null;
+        try {
+            st = con.createStatement();
+        } catch (SQLException e) {
+            System.out.println("Statement konnte nicht erstellt werden");
+        }
+        java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
+        String sql = ("SELECT text, post_id, watson_sentiment, watson_sentiment_score, watson_sadness, watson_joy, watson_fear, watson_disgust, watson_anger FROM "+dbTable+" WHERE date(date) between '" +sqlDate+ "' and date_add('"+sqlDate+" 00:00:00',interval 12 hour) AND watson_sentiment IS NOT NULL LIMIT 3;");
+        ResultSet rs = null;
+        try {
+            rs = st.executeQuery(sql);
+        } catch (SQLException e) {
+            System.out.println("Anfrage konnte nicht ausgeführt werden");;
+        }
+
+        return rs;
+    }
+
+    /**
+     * Methode, die den Text von 10 zufälligen noch nicht von Watson klassifizierten Posts aus der Datenbank liest und zusammen mit der zugehörigen ID in eine Hashmap speichert. Wird von classify und classifyNoDate in Verarbeitung benutzt, um Watson-Daten in die Datenbank zu speichern.
+     * @return results HashMap: Kombination von ids und Text aus Posts
+     */
     public static HashMap<Integer, String> getTextNoDate()  {
         Statement st = null;
         try {
             st = con.createStatement();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Statement konnte nicht erstellt werden");
         }
         String sql = ("SELECT text, post_id FROM "+dbTable+" WHERE post_id in (SELECT post_id FROM (SELECT post_id FROM "+dbTable+" ORDER BY RAND() LIMIT 10) t) AND watson_sentiment IS NULL LIMIT 10;");
         ResultSet rs = null;
@@ -116,7 +169,7 @@ public class MySQLconnect{
         try {
             rs = st.executeQuery(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Anfrage konnte nicht ausgeführt werden");;
         }
         try {
             while(rs.next()) {
@@ -126,14 +179,17 @@ public class MySQLconnect{
                 results.put(id, post_text);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Auf ResultSet konnte nicht zugegriffen werden");
         }
         return results;
     }
 
-    // Methode zum Auslesen des durchschnittlichen Watson Scores an einem bestimmten Tag
-    public static String getWatson(String datum) {
-        String message;
+    /**
+     * Liest Watson Daten aus der Datenbank aus und errechnet Durchschnittswerte für den Sentiment Score und die Emotions.
+     * @param datum String: Datum im Format YYYY-MM-DD
+     * @return ein double Array mit den Watson Werten in der Reihenfolge Sentiment, Sadness, Joy, Fear, Disgust, Anger
+     */
+    public double[] getWatson(String datum) {
         double average_sentiment = 0;
         double average_sadness = 0;
         double average_joy = 0;
@@ -146,22 +202,21 @@ public class MySQLconnect{
         try {
             myDate = formatter.parse(datum);
         } catch (ParseException e) {
-            e.printStackTrace();
+            System.out.println("Datum konnte nicht geparst werden");
         }
         Statement st = null;
-        StringBuilder sb = new StringBuilder();
         try {
             st = con.createStatement();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Statement konnte nicht erstellt werden");
         }
         java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
-        String sql = ("SELECT watson_sentiment_score, watson_sadness, watson_joy, watson_fear, watson_disgust, watson_anger FROM " + dbTable + " WHERE date(date) between '" + sqlDate + "' and date_add('" + sqlDate + " 00:00:00',interval 12 hour) AND watson_sentiment IS NOT NULL LIMIT 10;");
+        String sql = ("SELECT watson_sentiment_score, watson_sadness, watson_joy, watson_fear, watson_disgust, watson_anger FROM " + dbTable + " WHERE date(date) between '" + sqlDate + "' and date_add('" + sqlDate + " 00:00:00',interval 12 hour) AND watson_sentiment IS NOT NULL;");
         ResultSet rs = null;
         try {
             rs = st.executeQuery(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Anfrage konnte nicht ausgeführt werden");;
         }
         try {
             while (rs.next()) {
@@ -180,20 +235,24 @@ public class MySQLconnect{
             average_disgust = average_disgust / index;
             average_anger = average_anger / index;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Auf ResultSet konnte nicht zugegriffen werden");
         }
-        DecimalFormat df = new DecimalFormat("0.000");
-        String newLine = System.getProperty("line.separator");
-    if (Double.isNaN(average_sentiment)) {
-        message = "There are not enough classified objects to get an average. Please use the 'Classify' method first.";
-    }
-        else {
-        message = "Average Watson NLU data for the specified date:" + newLine + newLine + "Average sentiment: " + df.format(average_sentiment) + newLine + "Average sadness: " + df.format(average_sadness) + newLine + "Average joy: " + df.format(average_joy) + newLine + "Average fear: " + df.format(average_fear) + newLine + "Average disgust: " + df.format(average_disgust) + newLine + "Average anger: " + df.format(average_anger) + newLine + newLine + "What does this mean?" + newLine + "Sentiment: The value is always between -1 and 1 and stands for a positive (0 to 1) or negative (-1 to 0) sentiment in varying intensity." + newLine + "Emotions:  The number stands for the proportion of the emotion. The sum of all emotions is 1.";
-    }
-        return message;
+        double[] results = {average_sentiment, average_sadness, average_joy, average_fear, average_disgust, average_anger};
+
+        return results;
     }
 
-    // Methode zum Speichern neuer Daten, um den gab Corpus zu importieren
+    /**
+     * Speichert Daten in die MySQL-Datenbank. Hauptsächlicher Use-Case ist der Import vom Gab-Corpus.
+     * @param id int: post_id der Datenbank
+     * @param text String: Text vom Post
+     * @param date String: Datum im Format YYYY-MM-DD
+     * @param likes int: Anzahl der Likes
+     * @param dislikes int: Anzahl der Dislikes
+     * @param gabscore int: Gab-eigener Score, kann negativ sein
+     * @param nsfw boolean: Zeigt an, ob ein Post nsfw ist
+     * @param user_id int: id des Users
+     */
     public static void insertData(int id, String text, java.util.Date date , int likes, int dislikes, int gabscore, boolean nsfw, int user_id){
         try {
             PreparedStatement st = con.prepareStatement("INSERT INTO " + dbTable + " (post_id, text, date, likes, dislikes, gab_score, nsfw, userid) VALUES (?,?,?,?,?,?,?,?);");
@@ -212,7 +271,17 @@ public class MySQLconnect{
         }
     }
 
-    // Methode zum updaten vorhandener Einträge der Datenbank, um die Watson-Scores hinzuzufügen
+    /**
+     * Aktualisiert bestehende Einträge der Datenbank mit den Watson-Werten. Wird von classify und classifyNoDate in Verarbeitung benutzt, um Watson-Daten in die Datenbank zu speichern.
+     * @param id int: post_id der Datenbank
+     * @param sentiment String: positive, negative, neutral
+     * @param sentiment_score double: -1 bis 1
+     * @param sadness double 0 bis 1
+     * @param joy double 0 bis 1
+     * @param fear double 0 bis 1
+     * @param disgust double 0 bis 1
+     * @param anger double 0 bis 1, Summe aus sadness, joy, fear, disgust & anger ist 1
+     */
     public void updateData(int id, String sentiment, double sentiment_score, double sadness, double joy, double fear, double disgust, double anger){
         try {
             PreparedStatement st = con.prepareStatement("UPDATE " + dbTable + " SET watson_sentiment = ?, watson_sentiment_score = ?, watson_sadness = ?, watson_joy = ?, watson_fear = ?, watson_disgust = ?, watson_anger = ? WHERE post_id = ?;");
@@ -231,17 +300,4 @@ public class MySQLconnect{
         }
     }
 
-    public static void main(String[] args) {
-        MySQLconnect con = new MySQLconnect();
-        System.out.println(getWatson("2016-10-10"));
-    }
-
-    // Schließt die Verbindung zur Datenbank
-    public void close() {
-        try {
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

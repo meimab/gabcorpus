@@ -2,20 +2,18 @@ package uhh_lt.datenverarbeitung;
 
 import com.ibm.watson.natural_language_understanding.v1.model.AnalysisResults;
 import uhh_lt.datenbank.MySQLconnect;
-
 import java.util.HashMap;
 
 /**
- * The type Verarbeitung.
+ * Diese Klasse verwendet Methoden aus Watson und MySQLconnect, um bestehende Einträge der Datenbank um Watson-Werte zu erweitern..
  */
 public class Verarbeitung {
 
     /**
-     * Classify.
-     *
-     * @param date the date
+     * Benutzt Watson und MySQLconnect, um Watson-Daten (Sentiment, Sentiment Score & Emotions) in 10 Einträge der Datenbank eines bestimmten Datums zu speichern.
+     * @param date String: Datum im Format YYYY-MM-DD
      */
-    public static  void classify(String date){
+    public void classify(String date){
         MySQLconnect con = new MySQLconnect();
         HashMap<Integer,String> posts = con.getText(date);
 
@@ -39,9 +37,9 @@ public class Verarbeitung {
     }
 
     /**
-     * Classify no date.
+     * Benutzt Watson und MySQLconnect, um Watson-Daten (Sentiment, Sentiment Score & Emotions) in 10 zufällige Einträge der Datenbank zu speichern.
      */
-    public static  void classifyNoDate(){
+    public void classifyNoDate(){
         MySQLconnect con = new MySQLconnect();
         HashMap<Integer,String> posts = con.getTextNoDate();
 
@@ -64,10 +62,4 @@ public class Verarbeitung {
         con.close();
     }
 
-    public static void main (String[] arg) {
-
-        //classify("2016-10-10");
-        classifyNoDate();
-
-    }
 }
