@@ -1,81 +1,69 @@
 <!DOCTYPE html>
-<html>
-<title>gab.ai Sentiment-Analyse</title>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"/>
-
-<style>
-
-textarea {
-  width: 88%;
-  height: 200px;
-  padding: 10px;
-  border: 1px solid #d9d9d9;
-  outline: none;
-  font-size: 0,5rem;
-  resize: none;
-  line-height: 1.5rem;
-
-}</style>
-<script>
-// Side navigation
-function w3_open() {
-  var x = document.getElementById("mySidebar");
-  x.style.width = "20%";
-  x.style.fontSize = "20px";
-  x.style.paddingTop = "10%";
-  x.style.display = "block";
-}
-function w3_close() {
-  document.getElementById("mySidebar").style.display = "none";
-}
-
-</script>
-<nav class="w3-sidebar w3-bar-block w3-card w3-animate-left w3-center" style="display:none" id="mySidebar">
-    <h1 class="w3-xxxMedium w3-text-theme">Navigation</h1>
-    <button class="w3-bar-item w3-button" onclick="w3_close()"> <i class="fa fa-remove"></i></button>
-    <a href="#" class="w3-bar-item w3-button" onclick="location.href='/';">Home</a>
-    <a href="#" class="w3-bar-item w3-button" method="get" onclick="location.href='/info';" >Info</a>
-</nav>
-
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
+    <title>gab.ai Sentiment-Analyse</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"/>
+
+    <style>
+        textarea {
+        width: 88%;
+        height: 200px;
+        padding: 10px;
+        border: 1px solid #d9d9d9;
+        outline: none;
+        font-size: 0.5rem;
+        resize: none;
+        line-height: 1.5rem; }
+    </style>
+
+    <script>
+        function w3_open() {
+        var x = document.getElementById("mySidebar");
+        x.style.width = "20%";
+        x.style.fontSize = "20px";
+        x.style.paddingTop = "10%";
+        x.style.display = "block"; }
+        function w3_close() {
+        document.getElementById("mySidebar").style.display = "none"; }
+    </script>
+
+</head>
+<body>
+
+    <nav class="w3-sidebar w3-bar-block w3-card w3-animate-left w3-center" style="display:none" id="mySidebar">
+        <h1 class="w3-xxxMedium w3-text-theme">Navigation</h1>
+        <button class="w3-bar-item w3-button" onclick="w3_close()"> <i class="fa fa-remove"></i></button>
+         <a href="#" class="w3-bar-item w3-button" onclick="location.href='/';">Home</a>
+        <a href="#" class="w3-bar-item w3-button" onclick="location.href='/info';" >Info</a>
+    </nav>
+
     <div class="w3-container w3-theme w3-padding">
         <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i>
     </div>
-</head>
 
-
-<body>
-    <div class="w3-center">
-        <br>
-        <p><font size="+3">Worum geht es bei diesem Projekt?</font></p>
-        <br>
-        <p>Dieses Projekt hat das Ziel, den Gab-Corpus von über 34 Millionen Posts mithilfe von Watson NLU nach Sentiment und Emotionen zu analysieren. Außerdem soll die hierfür eingerichtete und verwendete Datenbank als Grundlage für weitere Analysen in der Zukunft dienen.
-        <p>Im Folgenden werden die Klassen des Projekts erklärt, die es dieser Website ermöglichen, die "Analyse" und "Classify"-Funktionen nutzen zu können:</p>
-        <br>
-        <p><font size="+1"><b>MySQLconnect</b></font></p>
+   <div class="w3-center">
+        <p style="font-size:3em;">Worum geht es bei diesem Projekt?</p>
+        <p>Dieses Projekt hat das Ziel, den Gab-Corpus von über 34 Millionen Posts mithilfe von Watson NLU nach Sentiment und Emotionen zu analysieren.<br /> Außerdem soll die hierfür eingerichtete und verwendete Datenbank als Grundlage für weitere Analysen in der Zukunft dienen.</p>
+        <p>Im Folgenden werden die Klassen des Projekts erklärt, die es dieser Website ermöglichen, die "Analyse" und "Classify"-Funktionen nutzen zu können:</p><br />
+        <p style="font-size:1.5em;"><b>MySQLconnect</b></p>
         <p>Ist dazu in der Lage, eine Verbindung zur Datenbank aufzubauen, um neue Daten einzuspeichern sowie Existierende Daten zu aktualisieren und auszulesen.</p>
-        <br>
-        <p><font size="+1"><b>JsonImport</b></font></p>
+        <p style="font-size:1.5em;"><b>JsonImport</b></p>
         <p>Liest JSON-Dateien Zeile für Zeile aus, um sie zusammen mit MySQLconnect in die Datenbank zu importieren.</p>
-        <br>
-        <p><font size="+1"><b>Watson</b></font></p>
+        <p style="font-size:1.5em;"><b>Watson</b></p>
         <p>Verbindet sich mit dem Watson NLU-Service und lässt Text auf Daten zu Sentiment und Emotionen analysieren.</p>
-        <br>
-        <p><font size="+1"><b>Verarbeitung</b></font></p>
+        <p style="font-size:1.5em;"><b>Verarbeitung</b></p>
         <p>Benutzt Methoden aus MySQLconnect und Watson, um Daten aus der Datenbank auszulesen, analysieren zu lassen und die neuen jeweiligen Zeilen um die neuen Daten zu erweitern.</p>
-    </div>
-<div class="w3-center">
-    <br><br><br>
-    <p><font size="+3">Wie wird das Tool benutzt?</font></p>
-    <br>
-    <p>Um Informationen zum Sentiment und Emotionen zu bekommen, muss nur "Analyse" verwendet werden. Dabei muss das Format (YYYY-MM-DD) eingehalten werden. <br> Außerdem muss sich das Datum zwischen 2016-08-10 und 2018-10-29 befinden.</p>
-    <br>
-    <p>Falls für ein gewähltes Datum keine noch Informationen vorhanden sind, ist es mit der "Classify"-Funktion möglich, neue Daten anzulegen. Diese Daten werden direkt ausgegeben. <br> Für eine zufällige Klassifizierung kann "RandomClassify verwendet werden."</p>
-</div>
-</body>
+    </div><br />
+    <div class="w3-center">
+        <p style="font-size:3em;">Wie wird das Tool benutzt?</p>
+        <p>Um Informationen zum Sentiment und Emotionen zu bekommen, muss nur "Analyse" verwendet werden. Dabei muss das Format (YYYY-MM-DD) eingehalten werden.<br /> Außerdem muss sich das Datum zwischen 2016-08-10 und 2018-10-29 befinden.</p>
+        <p>Falls für ein gewähltes Datum keine noch Informationen vorhanden sind, ist es mit der "Classify"-Funktion möglich, neue Daten anzulegen. Diese Daten werden direkt ausgegeben.<br /> Für eine zufällige Klassifizierung kann "RandomClassify verwendet werden."</p>
+    </div><br /><br /><br /><br /><br /><br />
+
 </body>
 </html>
