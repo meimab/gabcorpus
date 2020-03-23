@@ -74,21 +74,21 @@
     </div>
 
     <div class="w3-center">
-        <p><b>Die durchschnittlichen Watson-Werte für das angegebene Datum:</b></p>
-        <p>Sentiment:</p>
-        <p th:text="${sentiment}">sentiment</p>
-        <p>Sadness:</p>
+        <p style="font-size:2em"><b>Die durchschnittlichen Watson-Werte für das angegebene Datum:</b></p><b />
+        <p><b>Sentiment:</b></p>
+        <p th:text="${sentiment}"></p>
+        <p><b>Sadness:</b></p>
         <p th:text="${sadness}"></p>
-        <p>Anger:</p>
+        <p><b>Anger:</b></p>
         <p th:text="${anger}"></p>
-        <p>Disgust:</p>
+        <p><b>Disgust:</b></p>
         <p th:text="${disgust}"></p>
-        <p>Joy:</p>
+        <p><b>Joy:</b></p>
         <p th:text="${joy}"></p>
-        <p>Fear:</p>
-        <p th:text="${fear}"></p>
+        <p><b>Fear:</b></p>
+        <p th:text="${fear}"></p><br /><br />
         <p><b>Was bedeutet das?</b></p>
-        <p>Der Wert für "Sentiment" ist zwischen -1 und 1, wobei positive und negative Werte jeweils für positive und negative Sentiments stehen. Die 0 steht für neutrales Sentiment. Die Emotionen werden als Anteil angegeben, wobei die Summe von ihnen 1 ergibt.</p>
+        <p>Der Wert für "Sentiment" ist zwischen -1 und 1, wobei positive und negative Werte jeweils für positive und negative Sentiments stehen.<br /> Die 0 steht für neutrales Sentiment. Die Emotionen werden als Anteil angegeben, wobei die Summe von ihnen 1 ergibt.</p>
     </div>
 
     <div class="w3-center">
@@ -136,10 +136,10 @@
             <td align="center"><span th:text="${joy3}"></span></td>
             <td align="center"><span th:text="${fear3}"></span></td>
         </tr>
-    </table>
+    </table><br /><br /><br /><br /><br />
 
     <div class="w3-center">
-        <p style="font-size:2em;">Benutzen Sie "Analyse", um weitere Informationen bezüglich Sentiment und Emotionen der gab Posts für das gewählten Datum zu erhalten.</p>
+        <p style="font-size:1em;">Benutzen Sie "Analyse", um weitere Informationen bezüglich Sentiment und Emotionen der gab Posts für das gewählten Datum zu erhalten.</p>
         <form action="./analysis" method="get">
             <label for="date">Datum (Format: YYYY-MM-DD):</label>
             <input type="text" id="date" name="date" />
@@ -148,14 +148,14 @@
     </div><br /><br /><br /><br /><br />
 
     <div class="w3-center">
-    <p style="font-size:2em;">Wollen Sie Daten klassifizieren? Benutzen Sie dazu einfach "Classify" für ein bestimmtes Datum oder "RandomClassfiy" ohne Datum.</p>
+    <p style="font-size:1em;">Wollen Sie Daten klassifizieren? Benutzen Sie dazu einfach "Classify" für ein bestimmtes Datum oder "RandomClassfiy" ohne Datum.</p>
         <form action="classify" method="get">
             <label for="date">Datum (Format: YYYY-MM-DD):</label>
             <input type="text" id="date2" name="date" />
             <button type="submit" class="w3-button w3-theme" onclick="myFunction()">Classify</button>
         </form><br /><br />
         <a href="/randomClassify"><button class="w3-button w3-theme">RandomClassify</button></a>
-    </div>
+    </div><br /><br /><br /><br /><br /><br /><br />
 
 </body>
 </html>
