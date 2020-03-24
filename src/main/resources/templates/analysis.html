@@ -74,7 +74,7 @@
     </div>
 
     <div class="w3-center">
-        <p style="font-size:2em"><b>Die durchschnittlichen Watson-Werte für das angegebene Datum:</b></p><b />
+        <p style="font-size:2em"><b>Die durchschnittlichen Watson-Werte für das angegebene Datum:</b></p>
         <p><b>Sentiment:</b></p>
         <p th:text="${sentiment}"></p>
         <p><b>Sadness:</b></p>
@@ -110,31 +110,31 @@
             <th>Fear</th>
         </tr>
         <tr>
-            <td align="center"><span th:text="${text1}"></span></td>
-            <td align="center"><span th:text="${sentiment1}"></span></td>
-            <td align="center"><span th:text="${sadness1}"></span></td>
-            <td align="center"><span th:text="${anger1}"></span></td>
-            <td align="center"><span th:text="${disgust2}"></span></td>
-            <td align="center"><span th:text="${joy1}"></span></td>
-            <td align="center"><span th:text="${fear2}"></span></td>
+            <td style="text-align:center"><span th:text="${text1}"></span></td>
+            <td style="text-align:center"><span th:text="${sentiment1}"></span></td>
+            <td style="text-align:center"><span th:text="${sadness1}"></span></td>
+            <td style="text-align:center"><span th:text="${anger1}"></span></td>
+            <td style="text-align:center"><span th:text="${disgust1}"></span></td>
+            <td style="text-align:center"><span th:text="${joy1}"></span></td>
+            <td style="text-align:center"><span th:text="${fear1}"></span></td>
         </tr>
         <tr>
-            <td align="center"><span th:text="${text2}"></span></td>
-            <td align="center"><span th:text="${sentiment2}"></span></td>
-            <td align="center"><span th:text="${sadness2}"></span></td>
-            <td align="center"><span th:text="${anger2}"></span></td>
-            <td align="center"><span th:text="${disgust2}"></span></td>
-            <td align="center"><span th:text="${joy2}"></span></td>
-            <td align="center"><span th:text="${fear2}"></span></td>
+            <td style="text-align:center"><span th:text="${text2}"></span></td>
+            <td style="text-align:center"><span th:text="${sentiment2}"></span></td>
+            <td style="text-align:center"><span th:text="${sadness2}"></span></td>
+            <td style="text-align:center"><span th:text="${anger2}"></span></td>
+            <td style="text-align:center"><span th:text="${disgust2}"></span></td>
+            <td style="text-align:center"><span th:text="${joy2}"></span></td>
+            <td style="text-align:center"><span th:text="${fear2}"></span></td>
         </tr>
         <tr>
-            <td align="center"><span th:text="${text3}"></span></td>
-            <td align="center"><span th:text="${sentiment3}"></span></td>
-            <td align="center"><span th:text="${sadness3}"></span></td>
-            <td align="center"><span th:text="${anger3}"></span></td>
-            <td align="center"><span th:text="${disgust3}"></span></td>
-            <td align="center"><span th:text="${joy3}"></span></td>
-            <td align="center"><span th:text="${fear3}"></span></td>
+            <td style="text-align:center"><span th:text="${text3}"></span></td>
+            <td style="text-align:center"><span th:text="${sentiment3}"></span></td>
+            <td style="text-align:center"><span th:text="${sadness3}"></span></td>
+            <td style="text-align:center"><span th:text="${anger3}"></span></td>
+            <td style="text-align:center"><span th:text="${disgust3}"></span></td>
+            <td style="text-align:center"><span th:text="${joy3}"></span></td>
+            <td style="text-align:center"><span th:text="${fear3}"></span></td>
         </tr>
     </table><br /><br /><br /><br /><br />
 
@@ -148,13 +148,12 @@
     </div><br /><br /><br /><br /><br />
 
     <div class="w3-center">
-    <p style="font-size:1em;">Wollen Sie Daten klassifizieren? Benutzen Sie dazu einfach "Classify" für ein bestimmtes Datum oder "RandomClassfiy" ohne Datum.</p>
+    <p style="font-size:1em;">Wollen Sie Daten klassifizieren? Benutzen Sie dazu einfach "Classify" für ein bestimmtes Datum oder <a href="/randomClassify">RandomClassify</a> ohne Datum.</p>
         <form action="classify" method="get">
             <label for="date">Datum (Format: YYYY-MM-DD):</label>
             <input type="text" id="date2" name="date" />
             <button type="submit" class="w3-button w3-theme" onclick="myFunction()">Classify</button>
         </form><br /><br />
-        <a href="/randomClassify"><button class="w3-button w3-theme">RandomClassify</button></a>
     </div><br /><br /><br /><br /><br /><br /><br />
 
 </body>
